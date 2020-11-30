@@ -196,7 +196,7 @@ def tts():
         print('writing on...\n')
         #print(query)    
         file1 = open(r"D:\MinorProject\TextToSpeech.txt", "w")
-        file1.write(x)
+        file1.write(speech)
         file1.close()
         
         
