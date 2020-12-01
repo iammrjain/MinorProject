@@ -135,7 +135,7 @@ def stt():
         print('writing on...\n')
         #print(query)    
         file1 = open(r"D:\MinorProject\SpeechToText.txt", "w")
-        file1.write(x)
+        file1.write(query)
         file1.close()
 
     heading = ttk.Label(frame3,text = "Speech to Text",foreground="blue",background="black",font=("Cooper Black",40))
