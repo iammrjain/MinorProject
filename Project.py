@@ -25,7 +25,7 @@ root=ThemedTk(theme="plastik")  #try and use yaru,breeze, arc in place of plasti
 root.geometry("800x650")
 root.title("TRANSLATOR")
 
-    
+   
 gotohomepage = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Homepage.png")).resize((300,60), Image.ANTIALIAS))
 speechtotext = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Speech_to_Text.png")).resize((300,60), Image.ANTIALIAS))
 texttospeech = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Text_to_Speech.png")).resize((300,60), Image.ANTIALIAS))
@@ -158,7 +158,7 @@ def stt():
     T.place(x=350 , y=150)
 
     clear = ttk.Button(frame3,image = clr,command=lambda:T.delete(1.0,"end"),width=35)
-    clear.place(x=90 , y=270)
+    clear.place(x=90 , y=240)
 
     std = ttk.Button(frame3,image = savetodoc,command=save,width=35)
     std.place(x=50 , y=330)
@@ -207,7 +207,7 @@ def tts():
         file1.close()
    
     def clear():
-        entry0.delete(0,END)
+        entry0.delete("1.0",END)
         
 
     def filedatas():
@@ -247,16 +247,25 @@ def itts():
     backgroundimagelabel.place(x=0,y=0)
 
     heading = ttk.Label(frame5,text = "Image to Text/Speech",foreground="blue",background="black",font=("Cooper Black",40))
-    heading.place(x=200,y=30)
+    heading.place(x=100,y=30)
 
     pth =StringVar()
-    l = ttk.Label(frame5,text = "Enter Path",foreground="orange",background="black",font=("Cooper Black",20)).place(x=130 ,y=110)
-    entry0 = ttk.Entry(frame5,textvariable = pth).place(x=70 , y=150, height = 27, width = 270)
-
+    #l = ttk.Label(frame5,text = "Enter Path",foreground="orange",background="black",font=("Cooper Black",20)).place(x=130 ,y=110)
+    #entry0 = ttk.Entry(frame5,textvariable = pth).place(x=70 , y=150, height = 27, width = 270)
+    choosebutton=ttk.Button(frame5,image = browse,command = lambda:open_file(),width=40).place(x=90 , y=130)
+    
+   
+    def open_file():
+        global file3,filename
+        filename=filedialog.askopenfilename()
+        file3=open(filename,"rt")
+        file3.seek(0)
+               
+    
     def convert():
         global abc
-        y = pth.get()
-        img = Image.open(y)
+        #y = pth.get(filename)
+        img = Image.open(filename)
         pytesseract.pytesseract.tesseract_cmd = r"C:\Users\hp\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"
         abc = pytesseract.image_to_string(img)
         T.insert('end',abc)
@@ -269,7 +278,7 @@ def itts():
         file1.close()
 
 
-    tb = ttk.Button(frame5,image = translate, command=convert,width=35).place(x=90 , y=210)
+    tb = ttk.Button(frame5,image = translate, command=convert,width=35).place(x=90 , y=195)
 
     T = Text(frame5, height = 10, width =50)
     T.place(x=350 , y=150)
