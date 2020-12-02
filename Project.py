@@ -1,18 +1,14 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 from tkinter import *
 from tkinter import *
 from PIL import Image,ImageTk
 from tkinter import ttk
+import tkinter.scrolledtext as tskt
 from tkinter import filedialog
 import tkinter.messagebox as tmsg
 from ttkthemes import ThemedTk
 from translate import Translator
 import threading
+
 
 """from googletrans import *
 translator = Translator()"""
@@ -137,12 +133,17 @@ def stt():
             global audio,sr,s
             sr = s.Recognizer()
             with s.Microphone() as m:
+                #sr.pause_threshold = 0.5
+                sr.energy_threshold = 3000
                 audio = sr.listen(m)
 
             global query
-            query = sr.recognize_google(audio,language="en-IN")
-            print(query)
-            T.insert('end',query)
+            try:
+                query = sr.recognize_google(audio,language="en-IN")
+                print(query)   
+                T.insert('end',query)
+            except:
+                print("Sorry cant recognize")
         
         a_thread = threading.Thread(target = callback(en))
         a_thread.start()
@@ -166,9 +167,9 @@ def stt():
         for x in data:
             textbox2.insert(END,x)    
         
-        labell=ttk.Label(frame3,text="File content",foreground="orange",background="black",font=("Cooper Black",20)).place(x=520 , y=360)
+        labell=ttk.Label(frame3,text="File content",foreground="orange",background="black",font=("Cooper Black",20)).place(x=520 , y=340)
 
-        cleartextbox2 = ttk.Button(frame4,image = clr,command=lambda:textbox2.delete(1.0,"end"),width=40)
+        cleartextbox2 = ttk.Button(frame3,image = clr,command=lambda:textbox2.delete(1.0,"end"),width=40)
         cleartextbox2.place(x=210 , y=490)    
 
     heading = ttk.Label(frame3,text = "Speech to Text",foreground="blue",background="black",font=("Cooper Black",40))
@@ -205,7 +206,7 @@ def tts():
     l = ttk.Label(frame4,text = "Enter Text",foreground="orange",background="black",font=("Cooper Black",20)).place(x=130 ,y=110)
     entry0 = ttk.Entry(frame4,textvariable = en)
     entry0.place(x=70 , y=150, height = 100, width = 400)
-    
+       
 
     def trans():
         global speech
@@ -324,16 +325,3 @@ def itts():
 
 welcome()
 root.mainloop()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
