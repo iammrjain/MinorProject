@@ -2,16 +2,12 @@ from tkinter import *
 from tkinter import *
 from PIL import Image,ImageTk
 from tkinter import ttk
-import tkinter.scrolledtext as tskt
+import tkinter.scrolledtext as scrolledtext
 from tkinter import filedialog
 import tkinter.messagebox as tmsg
 from ttkthemes import ThemedTk
 from translate import Translator
 import threading
-
-
-"""from googletrans import *
-translator = Translator()"""
 
 import speech_recognition as s
 sr = s.Recognizer()
@@ -28,6 +24,7 @@ global root
 root=ThemedTk(theme="plastik")  #try and use yaru,breeze, arc in place of plastik theme.Delete this comment ok.
 root.geometry("800x650")
 root.title("TRANSLATOR")
+
     
 gotohomepage = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Homepage.png")).resize((300,60), Image.ANTIALIAS))
 speechtotext = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Speech_to_Text.png")).resize((300,60), Image.ANTIALIAS))
@@ -44,26 +41,6 @@ browse = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Browse.png")).r
 backgroundimage = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\maxresdefault.jpg")).resize((800,800), Image.ANTIALIAS))
 
 en =StringVar()
-"""def trans():
-    #global speech
-    x = en.get()
-    translator= Translator(to_lang="zh")
-    translation = translator.translate(x)
-    #speech = trans.text
-    T.insert('end',translation)"""
-    
-""""def trans():
-    global speech
-    x = en.get()
-    translator = Translator()
-    trans = translator.translate(x)
-    speech = trans.text
-    T.insert('end',speech)"""
-
-def speak():
-    engine = pyttsx3.init()
-    engine.say(speech)
-    engine.runAndWait()
 
 def welcome():
     global frame1,backgroundimage
@@ -204,35 +181,17 @@ def tts():
     heading.place(x=200,y=30)
     en = StringVar()
     l = ttk.Label(frame4,text = "Enter Text",foreground="orange",background="black",font=("Cooper Black",20)).place(x=130 ,y=110)
-    entry0 = ttk.Entry(frame4,textvariable = en)
-    entry0.place(x=70 , y=150, height = 100, width = 400)
+    entry0= scrolledtext.ScrolledText(frame4,height = 5, width = 40,relief=RIDGE)
+    entry0.place(x=70 , y=150)
        
-
-    def trans():
-        global speech
-        x = en.get()
-        translator= Translator(to_lang="hi")
-        speech = translator.translate(x)
-        print(speech)
-        #speech = trans.text
-        T.insert('end',speech)
-    
-    """"def trans():
-        global speech,x
-        x = en.get()
-        translator = Translator(to_lang="hi")
-        trans = translator.translate(x)
-        speech = trans.text
-        T.insert('end',speech)"""
-     
-
     def speak():
-        global x
-        x=en.get()
+        global audio_string
         engine = pyttsx3.init()
-        engine.say(x)
+        audio_string = entry0.get(1.0,END)
+        engine.say(audio_string)
         engine.runAndWait()
-
+        engine.stop()
+        
     def speak2(datta):
         dat=datta
         engine = pyttsx3.init()
@@ -244,7 +203,7 @@ def tts():
         print('writing on...\n')
         #print(query)    
         file1 = open(r"D:\MinorProject\TextToSpeech.txt", "w")
-        file1.write(x)
+        file1.write(audio_string)
         file1.close()
    
     def clear():
