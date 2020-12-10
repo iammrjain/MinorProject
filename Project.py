@@ -6,8 +6,8 @@ import tkinter.scrolledtext as scrolledtext
 from tkinter import filedialog
 import tkinter.messagebox as tmsg
 from ttkthemes import ThemedTk
-from translate import Translator
 import threading
+from googletrans import *
 
 import speech_recognition as s
 sr = s.Recognizer()
@@ -37,7 +37,7 @@ hinditoeng = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Hindi_to_En
 engtoeng = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\English_to_English.png")).resize((300,60), Image.ANTIALIAS))
 translate = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Translate.png")).resize((200,40), Image.ANTIALIAS))
 browse = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Browse.png")).resize((150,40), Image.ANTIALIAS))
-
+text = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\Text.png")).resize((150,40), Image.ANTIALIAS))
 backgroundimage = ImageTk.PhotoImage((Image.open(r"D:\MinorProject\Images\maxresdefault.jpg")).resize((800,800), Image.ANTIALIAS))
 
 en =StringVar()
@@ -164,7 +164,7 @@ def stt():
     std.place(x=50 , y=330)
 
     bth = ttk.Button(frame3,image = gotohomepage, command=homepage,width=35).place(x=200 , y=550)
-    choosebutton=ttk.Button(frame3,image = browse, command=filedatas,width=40).place(x=120 , y=420)
+    choosebutton=ttk.Button(frame3,image = browse, command=filedatas,width=40).place(x=90 , y=420)
 
 def tts():
 
@@ -179,19 +179,24 @@ def tts():
 
     heading = ttk.Label(frame4,text = "Text to Speech",foreground="blue",background="black",font=("Cooper Black",40))
     heading.place(x=200,y=30)
-    en = StringVar()
+    en =StringVar()
     l = ttk.Label(frame4,text = "Enter Text",foreground="orange",background="black",font=("Cooper Black",20)).place(x=130 ,y=110)
-    entry0= scrolledtext.ScrolledText(frame4,height = 5, width = 40,relief=RIDGE)
-    entry0.place(x=70 , y=150)
-       
+    entry0 = ttk.Entry(frame4,textvariable = en).place(x=70 , y=150, height = 27, width = 270)
+    
+    def trans():
+        global speech
+        x = en.get()
+        translator = Translator()
+        trans = translator.translate(x)
+        speech = trans.text
+        T.insert('end',speech)
+   
+
     def speak():
-        global audio_string
         engine = pyttsx3.init()
-        audio_string = entry0.get(1.0,END)
-        engine.say(audio_string)
+        engine.say(speech)
         engine.runAndWait()
-        engine.stop()
-        
+
     def speak2(datta):
         dat=datta
         engine = pyttsx3.init()
@@ -203,11 +208,9 @@ def tts():
         print('writing on...\n')
         #print(query)    
         file1 = open(r"D:\MinorProject\TextToSpeech.txt", "w")
-        file1.write(audio_string)
+        file1.write(speech)
         file1.close()
-   
-    def clear():
-        entry0.delete("1.0",END)
+        
         
 
     def filedatas():
@@ -229,15 +232,18 @@ def tts():
         cleartextbox2.place(x=210 , y=490)
     
          
+    tb = ttk.Button(frame4,image = translate, command=trans,width=20).place(x=100 , y=190)
     sb = ttk.Button(frame4,image = spk,command=speak,width=20).place(x=50 , y=260)
     tbb = ttk.Button(frame4,image = savetodoc, command=save,width=20).place(x=50 , y=320)
 
+    T = Text(frame4, height = 10, width = 45)
+    T.place(x=400 , y=150)
+    l2 = ttk.Label(frame4,text = "Translated Text",foreground="orange",background="black",font=("Cooper Black",20)).place(x=490 ,y=320)
     
-    clear = ttk.Button(frame4,image = clr,command=clear,width=20)
+    clear = ttk.Button(frame4,image = clr,command=lambda:T.delete(1.0,"end"),width=20)
     clear.place(x=210 , y=260)
     bth = ttk.Button(frame4,image = gotohomepage, command=homepage,width=40).place(x=200 , y=570)
     choosebutton=ttk.Button(frame4,image = browse, command=filedatas,width=40).place(x=120 , y=420)
-    
 def itts():
     frame2.place_forget()
     global frame5
@@ -260,7 +266,11 @@ def itts():
         filename=filedialog.askopenfilename()
         file3=open(filename,"rt")
         file3.seek(0)
-               
+    
+    def speak():
+        engine = pyttsx3.init()
+        engine.say(abc)
+        engine.runAndWait()
     
     def convert():
         global abc
@@ -278,17 +288,18 @@ def itts():
         file1.close()
 
 
-    tb = ttk.Button(frame5,image = translate, command=convert,width=35).place(x=90 , y=195)
+    tb = ttk.Button(frame5,image = text, command=convert,width=35).place(x=90 , y=198)
 
     T = Text(frame5, height = 10, width =50)
     T.place(x=350 , y=150)
 
     clear = ttk.Button(frame5,image = clr,command=lambda:T.delete(1.0,"end"),width=35)
-    clear.place(x=90 , y=270)
+    clear.place(x=90 , y=350)
 
     std = ttk.Button(frame5,image = savetodoc,command=save,width=35)
     std.place(x=50 , y=450)
 
+    sb = ttk.Button(frame5,image = spk,command=speak,width=20).place(x=90 , y=270)
     bth = ttk.Button(frame5,image = gotohomepage, command=homepage,width=35).place(x=200 , y=550)
 
 welcome()
